@@ -184,4 +184,5 @@ def home():
 
 # run server
 if __name__ == '__main__':
+    app.secret_key = 'cat12345'
     app.run()
