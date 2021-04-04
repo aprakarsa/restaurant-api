@@ -18,14 +18,14 @@ app = Flask(__name__)
 
 
 # env mode
-ENV = "dev"
+ENV = "prod"
 
 if ENV == "dev":
     app.debug = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:web989@localhost/restos'
 else:
     app.debug = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://tbapjrqighdksb:b0f03e16699ed53d89251d813f00dd2fc9b2dc6caf27d877ccd604a642a3b0b7@ec2-54-235-108-217.compute-1.amazonaws.com:5432/d59rr8du1s2jve'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://gdxsgvgdiwtgdi:f84939786f5c07e4c141db3bf1b0433577d6919ae252daefd56600fe782c5576@ec2-54-235-108-217.compute-1.amazonaws.com:5432/d5vbh504du1mi6'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -161,11 +161,11 @@ def login():
             session['logged_in'] = True
             session['username'] = username
 
-            flash('You are now logged in', 'success')
+            flash('You are now logged in.', 'success')
 
             return redirect(url_for('dashboard'))
         else:
-            error = "User not found!"
+            error = "User not found! Please register."
             return render_template('login.html', error=error)
 
     return render_template('login.html')
@@ -185,7 +185,7 @@ def is_logged_in(f):
 @app.route('/logout')
 def logout():
     session.clear()
-    flash('You are now logged out', 'success')
+    flash('You are now logged out.', 'success')
     return redirect(url_for('login'))
 
 
@@ -679,6 +679,5 @@ def seventhjson(start_date, end_date):
 if __name__ == '__main__':
     app.secret_key = 'kitthecat7*#'
     app.config['SESSION_TYPE'] = 'filesystem'
-    sess.init_app(app)
 
     app.run()
