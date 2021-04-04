@@ -16,6 +16,7 @@ from functools import wraps
 # init flask
 app = Flask(__name__)
 
+app.config['SECRET_KEY'] = 'kitthecat7'
 
 # env mode
 ENV = "prod"
@@ -677,7 +678,6 @@ def seventhjson(start_date, end_date):
 
 # run server
 if __name__ == '__main__':
-    app.secret_key = 'kitthecat7*#'
-    app.config['SESSION_TYPE'] = 'filesystem'
+    # app.secret_key = 'kitthecat7'
 
     app.run()
