@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<h3>The distance will be in KM</h3>
+<form action="" method="POST">
+        <em>Enter location (latitude, longitude) <a href="https://www.google.com/maps/" target="_blank">get them from google maps</a>:</em>
+        <input
+                type="text"
+                name="user_loc"
+                placeholder="e.g. -8.668654272394958, 115.22903407611979"
+                class="form-control"
+        />
+        <br>
+        <input type="submit" value="Submit" class="btn btn-primary" />
+</form>
+<hr>
+<form action="" method="POST">
+    <em>Use your current server location: <a href="/secondjson">locate you</a>:</em>
+    <br>
+    <input type="hidden" name="user_loc" value="auto">
+    <input type="submit" value="Submit" class="btn btn-primary" />
+</form>
+{% endblock %}

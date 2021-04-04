@@ -330,28 +330,70 @@ def firstjson(day, hour):
     return jsonify(result)
 
 
-# @app.route('/secondjson')
-# def secondjson():
-#     res = requests.get('https://ipinfo.io')
-#     result = res.json()
+@app.route('/resto_distance', methods=['GET', 'POST'])
+def resto_distance():
+    if request.method == 'POST':
+        curr_loc = request.form['user_loc']
 
-#     results = Restaurant.query.limit(1).all()
-#     loc_arr = results[0].location.split(',')
-#     lat = loc_arr[0]
-#     lon = loc_arr[1]
+        if curr_loc == 'auto':
+            res = requests.get('https://ipinfo.io')
+            result = res.json()
+            curr_loc = result['loc']
 
-#     from_db = (lat + ',' + lon)
-#     curr_loc = (-8.679412, 115.136036)
-#     tangguwisia = (-8.19292791439023, 114.95068201613135)
-#     measure_disc = distance.distance(curr_loc, from_db).km
+        results = Restaurant.query.all()
 
-#     msg = "NO"
-#     if measure_disc <= 5:
-#         msg = "OK"
+        restos_list = []
+        for result in results:
 
-#     app.logger.info(f'>>>>> {measure_disc} >>>>> {from_db}')
+            resto_loc = result.location
+            measure_disc = distance.distance(curr_loc, resto_loc).km
+            measure_disc = "{:.0f}".format(measure_disc)
 
-#     return jsonify(result)
+            d = {
+                "restaurant_name": result.name,
+                "location": resto_loc,
+                "distance_km": measure_disc,
+                "balance": result.balance,
+                "business_hours": result.hours
+            }
+
+            restos_list.append(d)
+
+        return jsonify(restos_list)
+
+    return render_template('resto_distance.html')
+
+
+@app.route('/secondjson')
+def secondjson():
+    res = requests.get('https://ipinfo.io')
+    auto_result = res.json()
+    # auto_curr_loc = result['loc']
+
+    manual_curr_loc = '-8.687532967177564, 115.22409881193322'
+
+    curr_loc = manual_curr_loc
+
+    results = Restaurant.query.all()
+
+    restos_list = []
+    for result in results:
+
+        resto_loc = result.location
+        measure_disc = distance.distance(curr_loc, resto_loc).km
+        measure_disc = "{:.0f}".format(measure_disc)
+
+        d = {
+            "restaurant_name": result.name,
+            "location": resto_loc,
+            "distance_km": measure_disc,
+            "balance": result.balance,
+            "business_hours": result.hours
+        }
+
+        restos_list.append(d)
+
+    return jsonify(auto_result)
 
 
 def check_resto_hours(props_results, day_name, open_daily):
@@ -728,11 +770,47 @@ def purchase2(resto_name):
 @app.route('/tenthjson2/<string:resto_name>')
 def tenthjson2(resto_name):
     resto_name_cap = c.hump(resto_name)
-
-    resto_name_cap = c.hump(resto_name)
     results = Purchase.query.filter(
         Purchase.restaurant_name == resto_name_cap).all()
 
+    result = purchase_schema.dump(results)
+
+    return jsonify(result)
+
+
+@app.route('/trx_to_user', methods=['GET', 'POST'])
+def trx_to_user():
+    if request.method == 'POST':
+        user_name = request.form['user_name']
+        user_name_cap = c.hump(user_name)
+
+        results = User.query.filter(User.name.contains(
+            user_name_cap)).order_by(User.name.asc()).all()
+
+        props = {
+            "message": "Filter: user name like: " + user_name_cap,
+            "usage": "/eleventhjson/<user_name>",
+            "user_name": user_name_cap
+        }
+
+        return render_template('trx_to_user_result.html', results=results, props=props)
+
+    return render_template('trx_to_user.html')
+
+
+@app.route('/eleventhjson/<string:user_name>')
+def eleventhjson(user_name):
+    user_name_cap = c.hump(user_name)
+    results = User.query.filter(User.name.contains(
+        user_name_cap)).order_by(User.name.asc()).all()
+    result = user_schema.dump(results)
+
+    return jsonify(result)
+
+
+@app.route('/eleventhjson2/<int:user_id>')
+def eleventhjson2(user_id):
+    results = Purchase.query.filter_by(user_id=user_id).all()
     result = purchase_schema.dump(results)
 
     return jsonify(result)

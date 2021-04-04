@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<form action="" method="POST">
+        <em>Search user:</em>
+        <input
+                type="text"
+                name="user_name"
+                placeholder="e.g. john"
+                class="form-control"
+        />
+        <br>
+        <input type="submit" value="Submit" class="btn btn-primary" />
+</form>
+{% endblock %}
