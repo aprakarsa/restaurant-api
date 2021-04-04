@@ -19,7 +19,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'kitthecat7'
 
 # env mode
-ENV = "dev"
+ENV = "prod"
 
 if ENV == "dev":
     app.debug = True
