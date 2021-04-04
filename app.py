@@ -15,12 +15,10 @@ from functools import wraps
 
 # init flask
 app = Flask(__name__)
-app.config['SESSION_TYPE'] = 'memcached'
-app.config['SECRET_KEY'] = 'verysecretkey999'
-sess = Session()
+
 
 # env mode
-ENV = "prod"
+ENV = "dev"
 
 if ENV == "dev":
     app.debug = True
@@ -679,4 +677,8 @@ def seventhjson(start_date, end_date):
 
 # run server
 if __name__ == '__main__':
+    app.secret_key = 'kitthecat7*#'
+    app.config['SESSION_TYPE'] = 'filesystem'
+    sess.init_app(app)
+
     app.run()
