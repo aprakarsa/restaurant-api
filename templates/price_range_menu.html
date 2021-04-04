@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<form action="" method="POST">
+        <em>Range price on minimum:</em>
+        <input
+                type="text"
+                name="minprice"
+                placeholder="Minimum price menus"
+                class="form-control"
+        />
+        <br>
+        <em>maximum:</em>
+        <input
+                type="text"
+                name="maxprice"
+                placeholder="Maximum price menus"
+                class="form-control"
+        />
+        <br>
+        <input type="submit" value="Submit" class="btn btn-primary" />
+</form>
+{% endblock %}

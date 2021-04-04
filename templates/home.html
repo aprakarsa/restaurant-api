@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="jumbotron text-center">
+  <h1>Meal Delivery API</h1>
+  <p class="lead">This app is build on Python Flask and PostgreSQL Database.</p>
+  {% if session.logged_in == NULL %}
+    <a href="/register" class="btn btn-primary btn-lg">Register</a>
+    <a href="/login" class="btn btn-success btn-lg">Login</a>
+  {% else %}
+    <a href="/dashboard" class="btn btn-secondary btn-lg">Dashboard</a>
+  {% endif %}
+</div>
+{% endblock %}

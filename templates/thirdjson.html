@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    {% for result in results %}
+
+        <p>
+            
+            {% if result.hours %}
+                {{ result.hours.split('|') }}
+            {% endif %}
+        </p>
+        
+
+        
+
+    {% endfor %}
+{% endblock %}

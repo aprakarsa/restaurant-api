@@ -1,0 +1,62 @@
+[
+    {
+        "name": "Orange House",
+        "location": "-8.65504,115.110801",
+        "balance": "4483.84",
+        "business_hours": "Sunday: 10:45 AM - 5 PM | Monday, Friday: 2:30 PM - 8 PM | Tuesday: 11 AM - 2 PM | Wednesday: 1:15 PM - 3:15 AM | Thursday: 10 AM - 3:15 AM | Saturday: 5 AM - 11:30 AM",
+        "menu": [
+            {
+            "name": "Kiwiberries",
+            "price": "10.64"
+            },
+            {
+            "name": "Dates",
+            "price": "12.45"
+            }
+        ]
+    },
+    {
+        "name": "34 Grill & Tap",
+        "location": "-8.679412,115.136036",
+        "balance": "4882.81",
+        "business_hours": "Sun, Fri: 6 AM - 9 PM | Mon, Weds: 11:45 AM - 4:45 PM | Tues: 7:45 AM - 2 AM | Thurs: 5:45 PM - 12 AM | Sat: 10:15 AM - 9 PM",
+        "menu": [
+            {
+                "name": "Goji Berry smoothie",
+                "price": "13.57"
+            },
+            {
+                "name": "Goji Berry juice",
+                "price": "10.15"
+            },
+            {
+                "name": "Caramel Pudding with Peanuts",
+                "price": "10.25"
+            }
+        ]
+    },
+    {
+        "name": "76 King",
+        "location": "-8.832813,115.130664",
+        "balance": "1320.19",
+        "business_hours": "Sunday: 2 PM - 7 PM | Monday, Wednesday: 3:45 PM - 5 PM | Tuesday: 11:30 AM - 3 AM | Thursday: 10 AM - 11:30 PM | Friday: 7 AM - 9:45 AM | Saturday: 12:45 PM - 1:15 PM",
+        "menu": [
+            {
+                "name": "Figs",
+                "price": "13.95"
+            },
+            {
+                "name": "Feijoa smoothie",
+                "price": "11.95"
+            },
+            {
+                "name": "Founders Kentucky Breakfast",
+                "price": "12.81"
+            },
+            {
+                "name": "Red Stripe English Brown Ale",
+                "price": "12.13"
+            }
+        ]
+    }
+]

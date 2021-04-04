@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<form action="" method="POST">
+    <em>Restaurant open on:</em>
+    <select class="form-select" aria-label="Default select example" name="day">
+        <option selected>Open this select menu</option>
+        <option value="Mon">Monday</option>
+        <option value="Tue">Tuesday</option>
+        <option value="Wed">Wednesday</option>
+        <option value="Thu">Thursday</option>
+        <option value="Fri">Friday</option>
+        <option value="Sat">Saturday</option>
+        <option value="Sun">Sunday</option>
+    </select>
+    <br>
+    <em>Open at:</em>
+    <select class="form-select" aria-label="Default select example" name="hour">
+        <option selected>Open this select menu</option>
+        {% for i in range(13) %}
+            {% if i != 0 %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+    <br>
+    <input type="submit" value="Submit" class="btn btn-primary" />
+</form>
+{% endblock %}

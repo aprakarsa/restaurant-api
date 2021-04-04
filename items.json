@@ -1,0 +1,17 @@
+[
+    {
+        "name": "item 1",
+        "price": 29.99,
+        "description": "This is some lit item"
+    },
+    {
+        "name": "item 2",
+        "price": 3.50,
+        "description": "Best item in the shop"
+    },
+    {
+        "name": "item 3",
+        "price": 1.99,
+        "description": "Best selling item"
+    }
+]

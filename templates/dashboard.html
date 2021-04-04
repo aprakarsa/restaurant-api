@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <h1>Dashboard | <small>Welcome {{ session.username }}</small></h1>
+
+    <ol>
+        <li>
+            List all restaurants that are open at a certain datetime.
+            <a class="btn btn-outline-success btn-sm" href="/restaurants"> list restaurants</a>
+        </li>
+        <li>
+            List all restaurants within the vicinity of the user’s location or (any location), ranked by distance (the distances will be displayed in the app)
+            <a class="btn btn-outline-danger btn-sm" href="#"> list restaurants</a>
+        </li>
+        <li>
+            List all restaurants that are open for x-z hours per day or week
+            <a class="btn btn-outline-warning btn-sm" href="/thirdjson"> list restaurants</a>
+        </li>
+        <li>
+            List all restaurants that have x-z number of dishes within a price range
+            <a class="btn btn-outline-success btn-sm" href="/price_range_menu"> list restaurants</a>
+        </li>
+        <li>
+            Search for restaurants or dishes by name, ranked by relevance to search term
+            <a class="btn btn-outline-success btn-sm" href="/resto_dish"> list restaurants</a>
+        </li>
+        <li>
+            Search for restaurants that has a dish matching search term
+            <a class="btn btn-outline-success btn-sm" href="/search_dish"> list restaurants</a>
+        </li>
+        <li>
+            The top x users by total transaction amount within a date range
+            <a class="btn btn-outline-success btn-sm" href="/top_x_users"> list restaurants</a>
+        </li>
+    </ol>
+    <hr>
+{% endblock %}

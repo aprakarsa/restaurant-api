@@ -1,0 +1,46 @@
+[
+    {
+        "name": "Don Reichert",
+        "location": "-8.640233,115.228221",
+        "balance": "700.7",
+        "purchases": [
+            {
+            "dish": "Dos Equis Light Hybrid Beer",
+            "restaurant_name": "Red Subs",
+            "amount": "13.18",
+            "date": "2020-02-10 04:09:00 UTC"
+            },
+            {
+            "dish": "Coconut Key Lime Pie with Toffee Bits",
+            "restaurant_name": "Blue Plate Eats",
+            "amount": "12.81",
+            "date": "2020-04-03 13:56:00 UTC"
+            }
+        ]
+    },
+    {
+        "name": "Abe Leannon",
+        "location": "-8.819846,115.131785",
+        "balance": "237.61",
+        "purchases": [
+            {
+                "dish": "Vanilla Cake with Caramel",
+                "restaurant_name": "Sugar Diner",
+                "amount": "10.6",
+                "date": "2019-10-28 16:38:00 UTC"
+            },
+            {
+                "dish": "Tomatoes smoothie",
+                "restaurant_name": "Orange BBQ",
+                "amount": "10.15",
+                "date": "2018-06-29 13:08:00 UTC"
+            },
+            {
+                "dish": "Coors lite Smoke-flavored",
+                "restaurant_name": "34 Diner",
+                "amount": "31.0",
+                "date": "2019-09-08 11:11:00 UTC"
+            }
+        ]
+    }
+]

@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <h3>{{ props["message"] }}</h3>
+    <div class="text-left">
+        <a class="btn btn-dark btn-sm" href="#" onclick="window.history.go(-1); return false;"> &lt;&lt; Back to previous page</a>
+    </div>
+    <div class="justify-content-end text-end">
+        <strong>Link usage: {{ props["usage"]}}</strong>
+        <a class="btn btn-outline-dark btn-sm" href="/fourthjson/{{ props['min_price'] }}/{{ props['max_price'] }}"> Get JSON file</a>
+    </div>
+    <table class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr class="text-center">
+                <th scope="col">#</th>
+                <th scope="col">Restaurant ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Location</th>
+                <th scope="col">Balance</th>
+                <th scope="col">Business Hours</th>
+                <th scope="col">Menus</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            {% set count = namespace(value=1) %}
+
+            {% for result in results %}
+
+                <tr>
+                    <td>{{ count.value }}</td>
+                    <td>{{ result.id }}</td>
+                    <td>{{ result.name }}</td>
+                    <td><a href="https://maps.google.com/?q={{ result.location }}">{{ result.location }}</a></td>
+                    <td>${{ "{:,}".format(result.balance) }}</td>
+                    <td style="font-size:smaller">{{ result.hours }}</td>
+                    <td><a class="btn btn-outline-info btn-sm" href="menus/{{ result.id }}">menus</a></td>
+                </tr>
+
+                {% set count.value = count.value + 1 %}
+
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <div class="text-left">
+        <a class="btn btn-dark btn-sm" href="#" onclick="window.history.go(-1); return false;"> &lt;&lt; Back to previous page</a>
+    </div>
+    <div class="justify-content-end text-end">
+        <strong>Usage: {{ props["usage"] }}/{user_id}</strong> 
+        <a class="btn btn-outline-dark btn-sm" href="{{ props['usage'] }}/{{ users.id }}"> Get JSON file</a>
+    </div>
+    <h3>{{ users.name }}'s purchases</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Dish</th>
+                <th scope="col">Restaurant Name</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        
+            {% set count = namespace(value=1) %}
+        
+            {% for result in results: %}
+                <tr>
+                    <td>{{ count.value }}</td>
+                    <td>{{ result.dish }}</td>
+                    <td>{{ result.restaurant_name }}</td>
+                    <td>${{ "{:,}".format(result.amount) }}</td>
+                    <td>{{ result.date }}</td>
+                </tr>
+
+                {% set count.value = count.value + 1 %}
+
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+<script>
+    document
+        .getElementById('go-back')
+        .addEventListener('click', () => { 
+            history.back(); 
+    });
+</script>

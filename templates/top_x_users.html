@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<form action="" method="POST">
+        <em>Start date with format YYYY-MM-DD:</em>
+        <input
+                type="text"
+                name="start_date"
+                placeholder="Enter start date range"
+                class="form-control"
+        />
+        <br>
+        <em>End date with format YYYY-MM-DD:</em>
+        <input
+                type="text"
+                name="end_date"
+                placeholder="Enter end date range"
+                class="form-control"
+        />
+        <br>
+        <input type="submit" value="Submit" class="btn btn-primary" />
+</form>
+{% endblock %}
