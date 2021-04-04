@@ -9,29 +9,83 @@
             <a class="btn btn-outline-success btn-sm" href="/restaurants"> list restaurants</a>
         </li>
         <li>
-            List all restaurants within the vicinity of the user’s location or (any location), ranked by distance (the distances will be displayed in the app)
+            List all restaurants within the vicinity of the user’s location or (any location), ranked by distance (the distances will be displayed in the app).
             <a class="btn btn-outline-danger btn-sm" href="#"> list restaurants</a>
         </li>
         <li>
-            List all restaurants that are open for x-z hours per day or week
+            List all restaurants that are open for x-z hours per day or week.
             <a class="btn btn-outline-warning btn-sm" href="/thirdjson"> list restaurants</a>
         </li>
         <li>
-            List all restaurants that have x-z number of dishes within a price range
+            List all restaurants that have x-z number of dishes within a price range.
             <a class="btn btn-outline-success btn-sm" href="/price_range_menu"> list restaurants</a>
         </li>
         <li>
-            Search for restaurants or dishes by name, ranked by relevance to search term
+            Search for restaurants or dishes by name, ranked by relevance to search term.
             <a class="btn btn-outline-success btn-sm" href="/resto_dish"> list restaurants</a>
         </li>
         <li>
-            Search for restaurants that has a dish matching search term
+            Search for restaurants that has a dish matching search term.
             <a class="btn btn-outline-success btn-sm" href="/search_dish"> list restaurants</a>
         </li>
         <li>
-            The top x users by total transaction amount within a date range
+            The top x users by total transaction amount within a date range.
             <a class="btn btn-outline-success btn-sm" href="/top_x_users"> list restaurants</a>
         </li>
+        <li>
+            The most popular restaurants by transaction volume, either by number of transactions or transaction amount.
+            <a class="btn btn-outline-warning btn-sm" href="/eightjson"> list restaurants</a>
+        </li>
+        <li>
+            Total number of users who made transactions above or below $v within a date range.
+            <a class="btn btn-outline-danger btn-sm" href="#"> list restaurants</a>
+        </li>
+        <li>
+            List all transactions belonging to a restaurant.
+            <a class="btn btn-outline-success btn-sm" href="/trx_to_resto"> list restaurants</a>
+        </li>
+        <li>
+            List all transactions belonging to a user.
+            <a class="btn btn-outline-danger btn-sm" href="#"> list restaurants</a>
+        </li>
+        <li>
+            Process a user purchase in an atomic manner and ensure the changes of cash balances can be applied safely and correctly.
+            <a class="btn btn-outline-danger btn-sm" href="#"> list restaurants</a>
+        </li>
     </ol>
+    <hr>
+    <ul>
+        <li>
+            Authorization is required!
+            <br>
+            <em> >> Use registration form, login/logout instead.</em>
+        </li>
+        <li>
+            How to import the raw data to the backend?
+            <br>
+            <em> >> Using flask_sqlalchemy.</em>
+        </li>
+        <li>
+            How to set up and start the backend server (dockerized app is preferred)?
+            <br>
+            <em> >> Python Flask and uploaded to Heroku using Heroku CLI.</em>
+        </li>
+        <li>
+            How to run the test suite? (if applicable)
+            <br>
+            <em> >> None</em>
+        </li>
+        <li>
+            The API documentation?
+            <br>
+            <em> >> Available on each page of the task above.</em>
+        </li>
+        <li>
+            The URL to the API?
+            <br>
+            <em> >> Available on each page of the task above.</em>
+        </li>
+        
+    </ul>
     <hr>
 {% endblock %}

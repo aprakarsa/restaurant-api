@@ -17,6 +17,7 @@ geopy = "*"
 flask-wtf = "*"
 passlib = "*"
 gunicorn = "*"
+camelcase = "*"
 
 [dev-packages]
 

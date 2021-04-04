@@ -11,7 +11,7 @@ from geopy import distance
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
-
+from camelcase import CamelCase
 
 # init flask
 app = Flask(__name__)
@@ -19,7 +19,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'kitthecat7'
 
 # env mode
-ENV = "prod"
+ENV = "dev"
 
 if ENV == "dev":
     app.debug = True
@@ -34,8 +34,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
+c = CamelCase()
 
 # model/db - restaurant table
+
+
 class Restaurant(db.Model):
     __tablename__ = 'restaurant'
     id = db.Column(db.Integer, primary_key=True)
@@ -667,13 +670,72 @@ def seventhjson(start_date, end_date):
     return jsonify(result)
 
 
-# @app.route('/eightjson')
-# def eightjson():
-#     results = db.session.query(Purchase.restaurant_name).filter()
+@app.route('/eightjson')
+def eightjson():
+    results = db.session.query(Purchase.restaurant_name, Purchase.amount).distinct().order_by(
+        Purchase.amount.desc()).all()
 
-#     result = user_schema.dump(results)
+    result = purchase_schema.dump(results)
 
-#     return jsonify(result)
+    return jsonify(result)
+
+
+@app.route('/trx_to_resto', methods=['GET', 'POST'])
+def trx_to_resto():
+    if request.method == 'POST':
+        resto_name = request.form['resto_name']
+        resto_name_cap = c.hump(resto_name)
+        results = Restaurant.query.filter(Restaurant.name.like(
+            f'%{resto_name_cap}%')).order_by(Restaurant.name.desc()).all()
+
+        props = {
+            "message": "Filter: restos name like: " + resto_name_cap,
+            "usage": "/tenthjson/<resto_name>",
+            "resto_name": resto_name
+        }
+
+        return render_template('trx_to_resto_result.html', results=results, props=props)
+
+    return render_template('trx_to_resto.html')
+
+
+@app.route('/tenthjson/<string:resto_name>')
+def tenthjson(resto_name):
+    resto_name_cap = c.hump(resto_name)
+
+    results = Restaurant.query.filter(Restaurant.name.like(
+        f'%{resto_name_cap}%')).order_by(Restaurant.name.desc()).all()
+
+    result = restaurant_schema.dump(results)
+
+    return jsonify(result)
+
+
+@app.route('/purchases2/<string:resto_name>')
+def purchase2(resto_name):
+    resto_name_cap = c.hump(resto_name)
+    results = Purchase.query.filter(
+        Purchase.restaurant_name == resto_name_cap).all()
+
+    props = {
+        "usage": "/tenthjson2",
+        "resto_name": resto_name
+    }
+
+    return render_template('purchases2.html', results=results, props=props)
+
+
+@app.route('/tenthjson2/<string:resto_name>')
+def tenthjson2(resto_name):
+    resto_name_cap = c.hump(resto_name)
+
+    resto_name_cap = c.hump(resto_name)
+    results = Purchase.query.filter(
+        Purchase.restaurant_name == resto_name_cap).all()
+
+    result = purchase_schema.dump(results)
+
+    return jsonify(result)
 
 
 # run server
