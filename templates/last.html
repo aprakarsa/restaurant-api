@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<form action="" method="POST">
+    <em>Select user:</em>
+    <select class="form-select" aria-label="Default select example" name="user_id">
+        <option selected>Open this select menu</option>
+        {% for user in users %}
+            <option value={{user.id}}>{{user.name}} - ${{user.balance}}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <em>Select restaurants:</em>
+    <select class="form-select" aria-label="Default select example" name="resto_id">
+        <option selected>Open this select menu</option>
+        {% for restaurant in restaurants %}
+            <option value={{restaurant.id}}>{{restaurant.name}} ({{restaurant.location}}_</option>
+        {% endfor %}
+    </select>
+    <br>
+    <input type="submit" value="Submit" class="btn btn-primary" />
+</form>
+{% endblock %}

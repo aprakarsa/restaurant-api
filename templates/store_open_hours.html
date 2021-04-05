@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<form action="" method="POST">
+        <em>Search restaurant:</em>
+        <input
+                type="text"
+                name="resto_name"
+                placeholder="e.g. orange house"
+                class="form-control"
+        />
+        <br>
+        <input type="submit" value="Submit" class="btn btn-primary" />
+</form>
+{% endblock %}

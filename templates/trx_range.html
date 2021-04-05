@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<form action="" method="POST">
+        <em>Please enter minimum amout:</em>
+        <input
+                type="text"
+                name="min_amount"
+                placeholder="e.g. 400"
+                class="form-control"
+        />
+        <br>
+        <em>Please enter maximum amount:</em>
+        <input
+                type="text"
+                name="max_amount"
+                placeholder="e.g. 500"
+                class="form-control"
+        />
+        <br>
+        <input type="submit" value="Submit" class="btn btn-primary" />
+</form>
+{% endblock %}

@@ -1,6 +1,7 @@
 import json
 import requests
 import datetime
+import time
 from flask import Flask, render_template, request, jsonify, flash, redirect, url_for, session, logging
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_
@@ -131,6 +132,7 @@ class RegisterForm(Form):
     confirm = PasswordField('Confirm Password')
 
 
+# register route
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
@@ -152,6 +154,7 @@ def register():
     return render_template('register.html', form=form)
 
 
+# login route
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -175,6 +178,7 @@ def login():
     return render_template('login.html')
 
 
+# if logged in
 def is_logged_in(f):
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -186,6 +190,7 @@ def is_logged_in(f):
     return wrap
 
 
+# logout route
 @app.route('/logout')
 def logout():
     session.clear()
@@ -193,6 +198,7 @@ def logout():
     return redirect(url_for('login'))
 
 
+# DB schemas
 class RestaurantSchema(ma.Schema):
     class Meta:
         fields = ('name', 'location', 'balance', 'hours')
@@ -225,6 +231,7 @@ purchase_schema = PurchaseSchema()
 purchase_schema = PurchaseSchema(many=True)
 
 
+# Home route
 @app.route('/')
 def home():
     restaurants = Restaurant.query.filter(
@@ -233,6 +240,7 @@ def home():
     return render_template('home.html', restaurants=restaurants)
 
 
+# dashboard rouet
 @app.route('/dashboard')
 @is_logged_in
 def dashboard():
@@ -396,7 +404,8 @@ def secondjson():
     return jsonify(auto_result)
 
 
-def check_resto_hours(props_results, day_name, open_daily):
+# count open hours function
+def check_resto_hours(props_results, day_name):
     list_days = []  # 0-1
     list_day = []  # 0-3
     list_hours = []
@@ -520,33 +529,67 @@ def check_resto_hours(props_results, day_name, open_daily):
 
     # app.logger.info(f' >>> { total_jam_menit_mon } <<< ')
 
-    if total_jam_mon == open_daily:
-        return True
-    else:
-        return False
+    return total_jam_menit_mon
 
 
-@app.route('/thirdjson')
-def thirdjson():
-    open_daily = 3
-    day_name = 'Mon'
-    results = Restaurant.query.filter_by(id=5).all()
-    # results = Restaurant.query.all()
+@app.route('/thirdjson/<int:resto_id>')
+def thirdjson(resto_id):
+    resto_days_list = []
 
-    # app.logger.info(f' >>> {check_resto_hours(results, day_name, open_daily)}')
+    results = Restaurant.query.filter(Restaurant.id == resto_id).all()
 
-    # class_list = []
-    counter = 0
     for result in results:
-        # class_list.append(result)
-        if check_resto_hours(results, day_name, open_daily) is True:
-            counter += 1
+        mon = check_resto_hours(results, 'Mon')
+        tue = check_resto_hours(results, 'Tue')
+        wed = check_resto_hours(results, 'Wed')
+        thu = check_resto_hours(results, 'Thu')
+        fri = check_resto_hours(results, 'Fri')
+        sat = check_resto_hours(results, 'Sat')
+        sun = check_resto_hours(results, 'Sun')
 
-    app.logger.info(f' >>> function: {counter}')
+        data = {
+            "restaurant_name": result.name,
+            "location": result.location,
+            "balance": result.balance,
+            "business_hours": result.hours,
+            "open_hours": [
+                {
+                    "monday": mon,
+                    "tuesday": tue,
+                    "wednesday": wed,
+                    "thursday": thu,
+                    "friday": fri,
+                    "saturday": sat,
+                    "sunday": sun
+                }
 
-    result = restaurant_schema.dump(results)
+            ]
 
-    return jsonify(result)
+        }
+
+        resto_days_list.append(data)
+
+    return jsonify(resto_days_list)
+
+
+@app.route('/store_open_hours', methods=['GET', 'POST'])
+def store_open_hours():
+    if request.method == 'POST':
+        resto_name = request.form['resto_name']
+        resto_name_cap = c.hump(resto_name)
+
+        results = Restaurant.query.filter(Restaurant.name.contains(
+            resto_name_cap)).order_by(Restaurant.name.asc()).all()
+
+        props = {
+            "message": "Filter: restos name like: " + resto_name_cap,
+            "usage": "/tenthjson/<resto_name>",
+            "resto_name": resto_name
+        }
+
+        return render_template('store_open_hours_result.html', results=results, props=props)
+
+    return render_template('store_open_hours.html')
 
 
 @app.route('/price_range_menu', methods=['GET', 'POST'])
@@ -722,6 +765,66 @@ def eightjson():
     return jsonify(result)
 
 
+@app.route('/trx_range', methods=['GET', 'POST'])
+def trx_range():
+    if request.method == 'POST':
+        min_amount = request.form["min_amount"]
+        max_amount = request.form["max_amount"]
+
+        results = Purchase.query.filter(
+            and_(Purchase.amount >= min_amount, Purchase.amount <= max_amount)).all()
+
+        data_list = []
+        for result in results:
+            queries = User.query.filter_by(id=result.user_id).all()
+
+            for query in queries:
+                app.logger.info(query.name)
+                data = {
+                    "user_name": query.name,
+                    "restaurant_name": result.restaurant_name,
+                    "dish": result.dish,
+                    "amount": result.amount,
+                    "date": result.date
+                }
+                data_list.append(data)
+
+        props = {
+            "message": "Filter: min amount/max amount: " + min_amount + "/" + max_amount,
+            "usage": "/ninethjson/<min_amount>/<max_amount>",
+            "min_amount": min_amount,
+            "max_amount": max_amount
+        }
+
+        # return render_template('trx_range_result.html', data_list=data_list, props=props)
+        return jsonify(data_list)
+
+    return render_template('trx_range.html')
+
+
+@app.route('/ninethjson/<int:min_amount>/<int:max_amount>')
+def ninethjson(min_amount, max_amount):
+    results = Purchase.query.filter(
+        and_(Purchase.amount >= min_amount, Purchase.amount <= max_amount)).all()
+
+    data_list = []
+    for result in results:
+        queries = User.query.filter_by(id=result.user_id).all()
+
+        for query in queries:
+            app.logger.info(query.name)
+            data = {
+                "user_name": query.name,
+                "restaurant_name": result.restaurant_name,
+                "dish": result.dish,
+                "amount": result.amount,
+                "date": result.date
+            }
+            data_list.append(data)
+
+    return jsonify(data_list)
+
+
 @app.route('/trx_to_resto', methods=['GET', 'POST'])
 def trx_to_resto():
     if request.method == 'POST':
@@ -814,6 +917,79 @@ def eleventhjson2(user_id):
     result = purchase_schema.dump(results)
 
     return jsonify(result)
+
+
+@app.route('/last', methods=['GET', 'POST'])
+def last():
+    if request.method == 'POST':
+        user_id = request.form['user_id']
+        resto_id = request.form['resto_id']
+
+        results = Menu.query.filter(
+            Menu.restaurant_id == resto_id).order_by(Menu.name.asc()).all()
+
+        props = {
+            "user_id": user_id,
+            "resto_id": resto_id
+        }
+
+        return render_template('last_result.html', results=results, props=props)
+
+    restaurants = Restaurant.query.order_by(Restaurant.name.asc()).all()
+    users = User.query.order_by(User.name.asc()).all()
+
+    return render_template('last.html', users=users, restaurants=restaurants)
+
+
+@app.route('/order/<int:user_id>/<int:resto_id>/<int:menu_id>')
+def order(user_id, resto_id, menu_id):
+    app.logger.info(f'user_id:{user_id}')
+    app.logger.info(f'resto_id:{resto_id}')
+    app.logger.info(f'menu_id:{menu_id}')
+
+    menu = db.session.query(Menu).filter(
+        Menu.id == menu_id).first()
+
+    user = db.session.query(User).filter(User.id == user_id).first()
+
+    resto = db.session.query(Restaurant).filter(
+        Restaurant.id == resto_id).first()
+
+    # update/subtract balance to user
+    user.balance = user.balance - menu.price
+    user.balance = float('{:.2f}'.format(user.balance))
+    db.session.commit()
+
+    # update/add balance to resto
+    resto.balance = resto.balance + menu.price
+    resto.balance = float('{:.2f}'.format(resto.balance))
+    db.session.commit()
+
+    # update/add entry to purchase table
+    dish = menu.name
+    restaurant_name = resto.name
+    amount = menu.price
+
+    ts = time.time()
+    st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+
+    date = st
+    user_id = user.id
+
+    purchase_order = Purchase(dish, restaurant_name, amount, date, user_id)
+    db.session.add(purchase_order)
+    db.session.commit()
+
+    data = {
+        "menu_name": menu.name,
+        "menu_price": menu.price,
+        "user_name": user.name,
+        "user_balance": user.balance,
+        "restaurant_name": resto.name,
+        "restaurant_balance": resto.balance
+    }
+
+    return jsonify(data)
 
 
 # run server
