@@ -248,6 +248,7 @@ def dashboard():
 
 
 @app.route('/restaurants', methods=['GET', 'POST'])
+@is_logged_in
 def restaurants():
     if request.method == 'POST':
         day = request.form['day']
@@ -290,6 +291,7 @@ def restaurants():
 
 
 @app.route('/menus/<int:id>')
+@is_logged_in
 def menus(id):
     results = Menu.query.filter_by(restaurant_id=id).all()
     resto = Restaurant.query.filter_by(id=id).first_or_404()
@@ -302,6 +304,7 @@ def menus(id):
 
 
 @app.route('/menusjson/<int:id>')
+@is_logged_in
 def menusjson(id):
     results = Menu.query.filter_by(restaurant_id=id).all()
     result = menu_schema.dump(results)
@@ -310,6 +313,7 @@ def menusjson(id):
 
 
 @app.route('/firstjson/<string:day>/<string:hour>')
+@is_logged_in
 def firstjson(day, hour):
 
     long_day = ""
@@ -339,6 +343,7 @@ def firstjson(day, hour):
 
 
 @app.route('/resto_distance', methods=['GET', 'POST'])
+@is_logged_in
 def resto_distance():
     if request.method == 'POST':
         curr_loc = request.form['user_loc']
@@ -373,6 +378,7 @@ def resto_distance():
 
 
 @app.route('/secondjson')
+@is_logged_in
 def secondjson():
     res = requests.get('https://ipinfo.io')
     auto_result = res.json()
@@ -533,6 +539,7 @@ def check_resto_hours(props_results, day_name):
 
 
 @app.route('/thirdjson/<int:resto_id>')
+@is_logged_in
 def thirdjson(resto_id):
     resto_days_list = []
 
@@ -573,6 +580,7 @@ def thirdjson(resto_id):
 
 
 @app.route('/store_open_hours', methods=['GET', 'POST'])
+@is_logged_in
 def store_open_hours():
     if request.method == 'POST':
         resto_name = request.form['resto_name']
@@ -593,6 +601,7 @@ def store_open_hours():
 
 
 @app.route('/price_range_menu', methods=['GET', 'POST'])
+@is_logged_in
 def price_range_menu():
     if request.method == 'POST':
         min_price = request.form['minprice']
@@ -615,6 +624,7 @@ def price_range_menu():
 
 
 @app.route('/fourthjson/<int:min_price>/<int:max_price>')
+@is_logged_in
 def fourthjson(min_price, max_price):
     min_price = min_price
     max_price = max_price
@@ -629,6 +639,7 @@ def fourthjson(min_price, max_price):
 
 
 @app.route('/resto_dish', methods=['GET', 'POST'])
+@is_logged_in
 def resto_dish():
     if request.method == 'POST':
         resto_name = request.form["resto_name"]
@@ -654,6 +665,7 @@ def resto_dish():
 
 
 @app.route('/fifthjson/<string:resto_name>/<string:dish_name>')
+@is_logged_in
 def fifthjson(resto_name, dish_name):
     resto_name_cap = resto_name.capitalize()
     dish_name_cap = dish_name.capitalize()
@@ -668,6 +680,7 @@ def fifthjson(resto_name, dish_name):
 
 
 @app.route('/search_dish', methods=['GET', 'POST'])
+@is_logged_in
 def search_dish():
     if request.method == 'POST':
         dish_name = request.form["dish_name"]
@@ -692,6 +705,7 @@ def search_dish():
 
 
 @app.route('/sixthjson/<string:dish_name>')
+@is_logged_in
 def sixthjson(dish_name):
     dish_name_cap = dish_name.capitalize()
     results = db.session.query(Restaurant).join(Menu).filter(
@@ -705,6 +719,7 @@ def sixthjson(dish_name):
 
 
 @app.route('/purchases/<int:id>')
+@is_logged_in
 def purchase(id):
     results = Purchase.query.filter_by(user_id=id).all()
     users = User.query.filter_by(id=id).first_or_404()
@@ -717,6 +732,7 @@ def purchase(id):
 
 
 @app.route('/purchasesjson/<int:id>')
+@is_logged_in
 def purchasesjson(id):
     results = Purchase.query.filter_by(user_id=id).all()
     result = purchase_schema.dump(results)
@@ -725,6 +741,7 @@ def purchasesjson(id):
 
 
 @app.route('/top_x_users', methods=['GET', 'POST'])
+@is_logged_in
 def top_x_users():
     if request.method == 'POST':
         start_date = request.form["start_date"]
@@ -746,6 +763,7 @@ def top_x_users():
 
 
 @app.route('/seventhjson/<string:start_date>/<string:end_date>')
+@is_logged_in
 def seventhjson(start_date, end_date):
     results = db.session.query(User).join(Purchase).filter(
         Purchase.date.between(start_date, end_date)).order_by(Purchase.amount.desc()).all()
@@ -756,6 +774,7 @@ def seventhjson(start_date, end_date):
 
 
 @app.route('/eightjson')
+@is_logged_in
 def eightjson():
     results = db.session.query(Purchase.restaurant_name, Purchase.amount).distinct().order_by(
         Purchase.amount.desc()).all()
@@ -766,6 +785,7 @@ def eightjson():
 
 
 @app.route('/trx_range', methods=['GET', 'POST'])
+@is_logged_in
 def trx_range():
     if request.method == 'POST':
         min_amount = request.form["min_amount"]
@@ -803,6 +823,7 @@ def trx_range():
 
 
 @app.route('/ninethjson/<int:min_amount>/<int:max_amount>')
+@is_logged_in
 def ninethjson(min_amount, max_amount):
     results = Purchase.query.filter(
         and_(Purchase.amount >= min_amount, Purchase.amount <= max_amount)).all()
@@ -826,6 +847,7 @@ def ninethjson(min_amount, max_amount):
 
 
 @app.route('/trx_to_resto', methods=['GET', 'POST'])
+@is_logged_in
 def trx_to_resto():
     if request.method == 'POST':
         resto_name = request.form['resto_name']
@@ -845,6 +867,7 @@ def trx_to_resto():
 
 
 @app.route('/tenthjson/<string:resto_name>')
+@is_logged_in
 def tenthjson(resto_name):
     resto_name_cap = c.hump(resto_name)
 
@@ -857,6 +880,7 @@ def tenthjson(resto_name):
 
 
 @app.route('/purchases2/<string:resto_name>')
+@is_logged_in
 def purchase2(resto_name):
     resto_name_cap = c.hump(resto_name)
     results = Purchase.query.filter(
@@ -871,6 +895,7 @@ def purchase2(resto_name):
 
 
 @app.route('/tenthjson2/<string:resto_name>')
+@is_logged_in
 def tenthjson2(resto_name):
     resto_name_cap = c.hump(resto_name)
     results = Purchase.query.filter(
@@ -882,6 +907,7 @@ def tenthjson2(resto_name):
 
 
 @app.route('/trx_to_user', methods=['GET', 'POST'])
+@is_logged_in
 def trx_to_user():
     if request.method == 'POST':
         user_name = request.form['user_name']
@@ -902,6 +928,7 @@ def trx_to_user():
 
 
 @app.route('/eleventhjson/<string:user_name>')
+@is_logged_in
 def eleventhjson(user_name):
     user_name_cap = c.hump(user_name)
     results = User.query.filter(User.name.contains(
@@ -912,6 +939,7 @@ def eleventhjson(user_name):
 
 
 @app.route('/eleventhjson2/<int:user_id>')
+@is_logged_in
 def eleventhjson2(user_id):
     results = Purchase.query.filter_by(user_id=user_id).all()
     result = purchase_schema.dump(results)
@@ -920,6 +948,7 @@ def eleventhjson2(user_id):
 
 
 @app.route('/last', methods=['GET', 'POST'])
+@is_logged_in
 def last():
     if request.method == 'POST':
         user_id = request.form['user_id']
@@ -942,6 +971,7 @@ def last():
 
 
 @app.route('/order/<int:user_id>/<int:resto_id>/<int:menu_id>')
+@is_logged_in
 def order(user_id, resto_id, menu_id):
     app.logger.info(f'user_id:{user_id}')
     app.logger.info(f'resto_id:{resto_id}')
