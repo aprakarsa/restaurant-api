@@ -12,10 +12,10 @@ ENV = "prod"
 
 if ENV == "dev":
     app.debug = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:web989@localhost/restos'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'your_local_db'
 else:
     app.debug = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://gdxsgvgdiwtgdi:f84939786f5c07e4c141db3bf1b0433577d6919ae252daefd56600fe782c5576@ec2-54-235-108-217.compute-1.amazonaws.com:5432/d5vbh504du1mi6'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'your_db_link'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
